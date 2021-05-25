@@ -453,26 +453,6 @@ contract Ownable is Context {
         emit OwnershipTransferred(_owner, newOwner);
         _owner = newOwner;
     }
-
-    function geUnlockTime() public view returns (uint256) {
-        return _lockTime;
-    }
-
-    //Locks the contract for owner for the amount of time provided
-    function lock(uint256 time) public virtual onlyOwner {
-        _previousOwner = _owner;
-        _owner = address(0);
-        _lockTime = now + time;
-        emit OwnershipTransferred(_owner, address(0));
-    }
-    
-    //Unlocks the contract for owner when _lockTime is exceeds
-    function unlock() public virtual {
-        require(_previousOwner == msg.sender, "You don't have permission to unlock");
-        require(now > _lockTime , "Contract is locked until 7 days");
-        emit OwnershipTransferred(_owner, _previousOwner);
-        _owner = _previousOwner;
-    }
 }
 
 // pragma solidity >=0.5.0;
@@ -885,14 +865,17 @@ contract Doraemoon is Context, IERC20, Ownable {
     }
     
     function setTaxFeePercent(uint256 taxFee) external onlyOwner() {
-        _taxFee = taxFee;
+        require(taxFee >= 0 && taxFee <= 10, "taxFee must from 0 to 10" );
+            _taxFee = taxFee;
     }
     
     function setLiquidityFeePercent(uint256 liquidityFee) external onlyOwner() {
-        _liquidityFee = liquidityFee;
+        require(liquidityFee >= 0 && liquidityFee <= 10, "liquidityFee must from 0 to 10" );
+            _liquidityFee = liquidityFee;
     }
    
     function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
+        require(maxTxPercent != 0, "can't set maxTxPercent to zero" );
         _maxTxAmount = _tTotal.mul(maxTxPercent).div(
             10**2
         );
