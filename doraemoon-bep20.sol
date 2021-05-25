@@ -884,14 +884,19 @@ contract Doraemoon is Context, IERC20, Ownable {
     }
     
     function setTaxFeePercent(uint256 taxFee) external onlyOwner() {
-        _taxFee = taxFee;
+        if(liquidityFee > 0 && liquidityFee < 10) {
+            _taxFee = taxFee;
+        } else return;
     }
     
     function setLiquidityFeePercent(uint256 liquidityFee) external onlyOwner() {
-        _liquidityFee = liquidityFee;
+        if(liquidityFee > 0 && liquidityFee < 10) {
+            _liquidityFee = liquidityFee;
+        } else return;
     }
    
     function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
+        if(maxTxPercent == 0) return;
         _maxTxAmount = _tTotal.mul(maxTxPercent).div(
             10**2
         );
