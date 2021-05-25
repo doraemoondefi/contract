@@ -884,13 +884,13 @@ contract Doraemoon is Context, IERC20, Ownable {
     }
     
     function setTaxFeePercent(uint256 taxFee) external onlyOwner() {
-        if(liquidityFee > 0 && liquidityFee < 10) {
+        if(taxFee >= 0 && taxFee <= 10) {
             _taxFee = taxFee;
         } else return;
     }
     
     function setLiquidityFeePercent(uint256 liquidityFee) external onlyOwner() {
-        if(liquidityFee > 0 && liquidityFee < 10) {
+        if(liquidityFee >= 0 && liquidityFee <= 10) {
             _liquidityFee = liquidityFee;
         } else return;
     }
@@ -1097,7 +1097,7 @@ contract Doraemoon is Context, IERC20, Ownable {
             tokenAmount,
             0, // slippage is unavoidable
             0, // slippage is unavoidable
-            owner(),
+            address(this),
             block.timestamp
         );
     }
