@@ -896,7 +896,7 @@ contract Doraemoon is Context, IERC20, Ownable {
     }
    
     function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
-        if(maxTxPercent == 0) return;
+        require(maxTxPercent != 0, "can't set maxTxPercent to zero" );
         _maxTxAmount = _tTotal.mul(maxTxPercent).div(
             10**2
         );
